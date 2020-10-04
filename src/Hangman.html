@@ -1,0 +1,114 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+<style>
+    #gameContainer{
+  margin:0 auto;
+  width:30%;
+  border:solid;
+  text-align:center;
+  padding:20px;
+}
+</style>
+</head>
+<body>
+<div id="gameContainer">
+  <h1>Le Pendu</h1>
+  <div id="mainGame">
+    <p id="theWord"></p>
+    <input type="text" id="guesser" size="1" maxlength="1"><button onclick="validate()">Valider</button>
+    <p id="alrdGuessed">Lettre déjà testées : </p>
+  </div>
+</div>
+<script src="js.js"></script>
+<script>
+    /********************************************************************************************
+ * Nom: Jacky
+ * Projet: Exercice - Le Pendu
+ * Date: 28.02.2017
+ * Version: 1.0
+
+Amélioration possible:
+- Ajouter un champ texte pour choisir un mot à deviner
+- Ajouter un compteur d'erreur
+- Ajouter une représentation graphique du pendu
+- Une fois le jeu terminé, proposer de rejouer ou non.
+
+*********************************************************************************************/
+
+//Création de la variable contenant le mot à deviner
+var word2guess = 'javascript';
+
+//Tableau qui va stocker les lettres déjà proposées
+var alrdGuessed = [];
+//Tableau qui va stocker le mot à deviner sous forme de _ _ _ _
+var theWord = [];
+//Variable qui va stocker le lettre que l'on souhaite proposer
+var guess;
+
+//On split la string word2guess afin de stocker le mot sous forme de tableau
+var displayWord = word2guess.split('');
+
+//Boucle qui va ajouter dans theWord le même nombre d'entrée que pour le mot à deviner
+for (var i = 0; i < displayWord.length; i++) {
+  theWord.push(' _ ');
+}
+
+//Afin d'éviter de devoir naviguer le DOM plusieurs fois (C'est lourd)
+//On crée des variables qui vont récupérer nos objets HTML 
+
+//Récupération de l'objet qui va afficher le mot au fur et à mesure que nous le devinons
+var theWordDisplay = document.getElementById('theWord');
+//Récupération de l'objet qui va afficher les lettres déjà proposées
+var alrdGuessedDisplay = document.getElementById('alrdGuessed');
+
+//On modifie l'attribut texte de notre élément HTML par la concaténation du tableau //theWord
+theWordDisplay.textContent = theWord.join('');
+
+/*
+
+Cette fonction comprend toute la fonctionnalité du jeu et sera appelé lors du clique sur le bouton valider
+
+*/
+function validate() {
+
+  //On récupère la valeure du champ texte. Cela va représenter notre guess
+  guess = document.getElementById('guesser').value;
+
+  /*Si la concaténation du tableau theWord N'EST PAS EGAL à la concaténation du tableau     displayWord. En gros, on test si il reste des lettres à deviner
+  
+  Si les deux tableaux sont identiques, cela veut dire que le mot a été deviné
+  */
+  if (theWord.join('') !== displayWord.join('')) {
+    /*
+    On créer un boucle pour tester si la lettre entrée dans le champ texte correspond à une ou plusieurs lettres présentes dans le tableau du mot à deviner (displayWord)
+    */
+    for (i = 0; i < displayWord.length; i++) {
+      // Si la variable guess EST EGAL à l'entré du tableau displayWord à l'index i
+      if (guess == displayWord[i]) {
+        //On ajoute notre guess au tableau des lettres devinées au même index que la lettre correspondante.
+        theWord[i] = guess;
+        //On met à jour l'affichage de l'avancé du mot à deviner
+        theWordDisplay.textContent = theWord.join('');
+        //Si la lettre de correspond à aucune lettre du mot à deviner on ne fait rien
+      } else {
+
+      }
+    }
+    //On ajoute en fin de tableau la lettre que l'on vien de deviner
+    alrdGuessed.push(guess);
+    //On met à jour l'affichage des lettres déjà proposées.
+    alrdGuessedDisplay.textContent = alrdGuessed.join(',');
+    //Si nos deux tableaux sont égaux alors toutes les lettres ont été devinées
+  } else {
+    //On affiche un message de félicitation à la place des lettres déjà proposées.
+    alrdGuessedDisplay.textContent = 'BRAVO vous avez gagné'
+  }
+}
+
+</script>
+</body>
+</html>
